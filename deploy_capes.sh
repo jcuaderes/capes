@@ -17,12 +17,12 @@ sudo sed -i 's/localpkg_gpgcheck=1/localpkg_gpgcheck=0/' /etc/yum.conf
 
 clear
 # Create your Gitea passphrase
-echo "Create your Gitea passphrase for the MySQL database and press [Enter]. You will create your Gitea administration credentials after the installation."
-read -s giteapassphrase
+# echo "Create your Gitea passphrase for the MySQL database and press [Enter]. You will create your Gitea administration credentials after the installation."
+# read -s giteapassphrase
 
 # Create your HackMD passphrase
-echo "Create your HackMD passphrase for the MySQL database and press [Enter]. You will create your specific HackMD credentials after the installation."
-read -s hackmdpassphrase
+# echo "Create your HackMD passphrase for the MySQL database and press [Enter]. You will create your specific HackMD credentials after the installation."
+# read -s hackmdpassphrase
 
 # Create your Mattermost passphrase
 echo "Create your Mattermost passphrase for the MySQL database and press [Enter]. You will create your Mattermost administration credentials after the installation."
@@ -112,58 +112,58 @@ sudo chown murmur:murmur /var/log/murmur
 sudo chmod 0770 /var/log/murmur
 
 # Download binaries
-curl -OL https://github.com/mumble-voip/mumble/releases/download/1.2.19/murmur-static_x86-1.2.19.tar.bz2
-tar xjf murmur-static_x86-1.2.19.tar.bz2
-sudo mkdir -p /opt/murmur
-sudo cp -r murmur-static_x86-1.2.19/* /opt/murmur
-sudo cp murmur-static_x86-1.2.19/murmur.ini /etc/murmur.ini
-rm -rf murmur-static_x86-1.2.19.tar.bz2 murmur-static_x86-1.2.19
+# curl -OL https://github.com/mumble-voip/mumble/releases/download/1.2.19/murmur-static_x86-1.2.19.tar.bz2
+# tar xjf murmur-static_x86-1.2.19.tar.bz2
+# sudo mkdir -p /opt/murmur
+# sudo cp -r murmur-static_x86-1.2.19/* /opt/murmur
+# sudo cp murmur-static_x86-1.2.19/murmur.ini /etc/murmur.ini
+# rm -rf murmur-static_x86-1.2.19.tar.bz2 murmur-static_x86-1.2.19
 
 # Configure /etc/murmur.ini
-sudo sed -i 's/database=/database=\/var\/lib\/murmur\/murmur\.sqlite/' /etc/murmur.ini
-sudo sed -i 's/\#logfile=murmur\.log/logfile=\/var\/log\/murmur\/murmur\.log/' /etc/murmur.ini
-sudo sed -i 's/\#pidfile=/pidfile=\/var\/run\/murmur\/murmur\.pid/' /etc/murmur.ini
-sudo sed -i 's/\#registerName=Mumble\ Server/registerName=CAPES\ -\ Mumble\ Server/' /etc/murmur.ini
-sudo sed -i 's/port=64738/port=7000/' /etc/murmur.ini
+# sudo sed -i 's/database=/database=\/var\/lib\/murmur\/murmur\.sqlite/' /etc/murmur.ini
+# sudo sed -i 's/\#logfile=murmur\.log/logfile=\/var\/log\/murmur\/murmur\.log/' /etc/murmur.ini
+# sudo sed -i 's/\#pidfile=/pidfile=\/var\/run\/murmur\/murmur\.pid/' /etc/murmur.ini
+# sudo sed -i 's/\#registerName=Mumble\ Server/registerName=CAPES\ -\ Mumble\ Server/' /etc/murmur.ini
+# sudo sed -i 's/port=64738/port=7000/' /etc/murmur.ini
 
 # Rotate logs
-sudo bash -c 'cat > /etc/logrotate.d/murmur <<EOF
-/var/log/murmur/*log {
-    su murmur murmur
-    dateext
-    rotate 4
-    missingok
-    notifempty
-    sharedscripts
-    delaycompress
-    postrotate
-        /bin/systemctl reload murmur.service > /dev/null 2>/dev/null || true
-    endscript
-}
-EOF'
+# sudo bash -c 'cat > /etc/logrotate.d/murmur <<EOF
+#/var/log/murmur/*log {
+ # su murmur murmur
+ # dateext
+ # rotate 4
+ # missingok
+ # notifempty
+ # sharedscripts
+ # delaycompress
+ # postrotate
+ #    /bin/systemctl reload murmur.service > /dev/null 2>/dev/null || true
+    #endscript
+#}
+#EOF'
 
 # Creating the systemd service
-sudo bash -c 'cat > /etc/systemd/system/murmur.service <<EOF
-[Unit]
-Description=Mumble Server (Murmur)
-Requires=network-online.target
-After=network-online.target mariadb.service time-sync.target
+#sudo bash -c 'cat > /etc/systemd/system/murmur.service <<EOF
+#[Unit]
+#Description=Mumble Server (Murmur)
+#Requires=network-online.target
+#After=network-online.target mariadb.service time-sync.target
 
-[Service]
-User=murmur
-Type=forking
-ExecStart=/opt/murmur/murmur.x86 -ini /etc/murmur.ini
-PIDFile=/var/run/murmur/murmur.pid
-ExecReload=/bin/kill -s HUP $MAINPID
+#[Service]
+#User=murmur
+#Type=forking
+#ExecStart=/opt/murmur/murmur.x86 -ini /etc/murmur.ini
+#PIDFile=/var/run/murmur/murmur.pid
+#ExecReload=/bin/kill -s HUP $MAINPID
 
-[Install]
-WantedBy=multi-user.target
-EOF'
+#[Install]
+#WantedBy=multi-user.target
+#EOF'
 
 # Generate the pid directory for Murmur:
-sudo bash -c 'cat > /etc/tmpfiles.d/murmur.conf <<EOF
-d /var/run/murmur 775 murmur murmur
-EOF'
+# sudo bash -c 'cat > /etc/tmpfiles.d/murmur.conf <<EOF
+# d /var/run/murmur 775 murmur murmur
+# EOF'
 
 ################################
 ########## Mattermost ##########
@@ -229,53 +229,53 @@ sudo chmod 664 /etc/systemd/system/mattermost.service
 ################################
 
 # Install dependencies
-sudo yum install npm gcc-c++ git -y
+#sudo yum install npm gcc-c++ git -y
 
 # Stage HackMD for building
-sudo npm install -g uws node-gyp tap webpack grunt yarn
-sudo yarn add -D webpack-cli
-sudo git clone https://github.com/hackmdio/hackmd.git /opt/hackmd/
-cd /opt/hackmd
-sudo bin/setup
-cd -
+#sudo npm install -g uws node-gyp tap webpack grunt yarn
+#sudo yarn add -D webpack-cli
+#sudo git clone https://github.com/hackmdio/hackmd.git /opt/hackmd/
+#cd /opt/hackmd
+#sudo bin/setup
+#cd -
 
 # Set up the HackMD database
-mysql -u root -e "CREATE DATABASE hackmd;"
-mysql -u root -e "GRANT ALL PRIVILEGES ON hackmd.* TO 'hackmd'@'localhost' IDENTIFIED BY '$hackmdpassphrase';"
+#mysql -u root -e "CREATE DATABASE hackmd;"
+#mysql -u root -e "GRANT ALL PRIVILEGES ON hackmd.* TO 'hackmd'@'localhost' IDENTIFIED BY '$hackmdpassphrase';"
 
 # Update the HackMD configuration files
-sudo sed -i 's/"username":\ ""/"username":\ "hackmd"/' /opt/hackmd/config.json
-sudo sed -i 's/"password":\ ""/"password":\ "'$hackmdpassphrase'"/' /opt/hackmd/config.json
-sudo sed -i 's/5432/3306/' /opt/hackmd/config.json
-sudo sed -i 's/postgres/mysql/' /opt/hackmd/config.json
-sudo sed -i 's/change\ this/mysql:\/\/hackmd:'$hackmdpassphrase'@localhost:3306\/hackmd/' /opt/hackmd/.sequelizerc
+#sudo sed -i 's/"username":\ ""/"username":\ "hackmd"/' /opt/hackmd/config.json
+#sudo sed -i 's/"password":\ ""/"password":\ "'$hackmdpassphrase'"/' /opt/hackmd/config.json
+#sudo sed -i 's/5432/3306/' /opt/hackmd/config.json
+#sudo sed -i 's/postgres/mysql/' /opt/hackmd/config.json
+#sudo sed -i 's/change\ this/mysql:\/\/hackmd:'$hackmdpassphrase'@localhost:3306\/hackmd/' /opt/hackmd/.sequelizerc
 
 # Build HackMD
-sudo npm run build --prefix /opt/hackmd/
+#sudo npm run build --prefix /opt/hackmd/
 
 # Add the HackMD user with no login
-sudo useradd -s /usr/sbin/nologin hackmd
+#sudo useradd -s /usr/sbin/nologin hackmd
 
 # Set directory permissions for HackMD
-sudo chown -R hackmd:hackmd /opt/hackmd
+#sudo chown -R hackmd:hackmd /opt/hackmd
 
 # Creating the HackMD service
-sudo bash -c 'cat > /etc/systemd/system/hackmd.service <<EOF
-[Unit]
-Description=HackMD Service
-Requires=network-online.target
-After=network-online.target mariadb.service time-sync.target
+#sudo bash -c 'cat > /etc/systemd/system/hackmd.service <<EOF
+#[Unit]
+#Description=HackMD Service
+#Requires=network-online.target
+#After=network-online.target mariadb.service time-sync.target
 
-[Service]
-User=hackmd
-Group=hackmd
-WorkingDirectory=/opt/hackmd
-Type=simple
-ExecStart=/bin/npm start production --prefix /opt/hackmd/
+#[Service]
+#User=hackmd
+#Group=hackmd
+#WorkingDirectory=/opt/hackmd
+#Type=simple
+#ExecStart=/bin/npm start production --prefix /opt/hackmd/
 
-[Install]
-WantedBy=multi-user.target
-EOF'
+#[Install]
+#WantedBy=multi-user.target
+#EOF'
 
 ################################
 ########## Gitea ###############
@@ -284,64 +284,64 @@ EOF'
 # Big thanks to @seven62 for fixing the Git 2.x and MariaDB issues and getting the service back in the green!
 
 # Install dependencies
-sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
-sudo yum update git -y
+#sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
+#sudo yum update git -y
 
 # Configure MariaDB
-mysql -u root -e "CREATE DATABASE gitea;"
-mysql -u root -e "GRANT ALL PRIVILEGES ON gitea.* TO 'gitea'@'localhost' IDENTIFIED BY '$giteapassphrase';"
-mysql -u root -e "FLUSH PRIVILEGES;"
-mysql -u root -e "set global innodb_file_format = Barracuda;
-set global innodb_file_per_table = on;
-set global innodb_large_prefix = 1;
-use gitea;
-CREATE TABLE oauth2_session (
-  id varchar(400) NOT NULL,
-  data text,
-  created_unix bigint(20) DEFAULT NULL,
-  updated_unix bigint(20) DEFAULT NULL,
-  expires_unix bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE oauth2_session
-  ADD PRIMARY KEY (id(191));
-COMMIT;"
+#mysql -u root -e "CREATE DATABASE gitea;"
+#mysql -u root -e "GRANT ALL PRIVILEGES ON gitea.* TO 'gitea'@'localhost' IDENTIFIED BY '$giteapassphrase';"
+#mysql -u root -e "FLUSH PRIVILEGES;"
+#mysql -u root -e "set global innodb_file_format = Barracuda;
+#set global innodb_file_per_table = on;
+#set global innodb_large_prefix = 1;
+#use gitea;
+#CREATE TABLE oauth2_session (
+#  id varchar(400) NOT NULL,
+#  data text,
+#  created_unix bigint(20) DEFAULT NULL,
+#  updated_unix bigint(20) DEFAULT NULL,
+#  expires_unix bigint(20) DEFAULT NULL
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+#ALTER TABLE oauth2_session
+#  ADD PRIMARY KEY (id(191));
+#COMMIT;"
 
 # Create the Gitea user
-sudo useradd -s /usr/sbin/nologin gitea
+#sudo useradd -s /usr/sbin/nologin gitea
 
 # Grab Gitea and make it a home
-sudo mkdir -p /opt/gitea
-sudo curl -L https://dl.gitea.io/gitea/master/gitea-master-linux-amd64 -o /opt/gitea/gitea
-sudo chown -R gitea:gitea /opt/gitea
-sudo chmod 744 /opt/gitea/gitea
+#sudo mkdir -p /opt/gitea
+#sudo curl -L https://dl.gitea.io/gitea/master/gitea-master-linux-amd64 -o /opt/gitea/gitea
+#sudo chown -R gitea:gitea /opt/gitea
+#sudo chmod 744 /opt/gitea/gitea
 
 # Create the Gitea service
-sudo bash -c 'cat > /etc/systemd/system/gitea.service <<EOF
-[Unit]
-Description=Gitea (Git with a cup of tea)
-After=syslog.target
-After=network.target
-After=mariadb.service
+#sudo bash -c 'cat > /etc/systemd/system/gitea.service <<EOF
+#[Unit]
+#Description=Gitea (Git with a cup of tea)
+#After=syslog.target
+#After=network.target
+#After=mariadb.service
 
-[Service]
+#[Service]
 # Modify these two values and uncomment them if you have
 # repos with lots of files and get an HTTP error 500 because
 # of that
 ###
 #LimitMEMLOCK=infinity
 #LimitNOFILE=65535
-RestartSec=2s
-Type=simple
-User=gitea
-Group=gitea
-WorkingDirectory=/opt/gitea
-ExecStart=/opt/gitea/gitea web -p 4000
-Restart=always
-Environment=USER=gitea HOME=/home/gitea
+#RestartSec=2s
+#Type=simple
+#User=gitea
+#Group=gitea
+#WorkingDirectory=/opt/gitea
+#ExecStart=/opt/gitea/gitea web -p 4000
+#Restart=always
+#Environment=USER=gitea HOME=/home/gitea
 
-[Install]
-WantedBy=multi-user.target
-EOF'
+#[Install]
+#WantedBy=multi-user.target
+#EOF'
 
 ################################
 ########### TheHive ############
@@ -488,8 +488,8 @@ sudo sed -i "s/hostname/$HOSTNAME/" /etc/metricbeat/metricbeat.yml
 ########### Kibana #############
 ################################
 
-sudo yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-5.6.5-x86_64.rpm
-sudo sed -i "s/#server\.host: \"localhost\"/server\.host: \"0\.0\.0\.0\"/" /etc/kibana/kibana.yml
+#sudo yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-5.6.5-x86_64.rpm
+#sudo sed -i "s/#server\.host: \"localhost\"/server\.host: \"0\.0\.0\.0\"/" /etc/kibana/kibana.yml
 
 ################################
 ########## Firewall ############
@@ -503,8 +503,14 @@ sudo sed -i "s/#server\.host: \"localhost\"/server\.host: \"0\.0\.0\.0\"/" /etc/
 # Port 7000 - Mumble
 # Port 9000 - TheHive
 # Port 9001 - Cortex (TheHive Analyzer Plugin)
-sudo firewall-cmd --add-port=80/tcp --add-port=3000/tcp --add-port=4000/tcp --add-port=5000/tcp --add-port=5601/tcp --add-port=9000/tcp --add-port=9001/tcp --add-port=7000/tcp --add-port=7000/udp --permanent
+sudo firewall-cmd --add-port=80/tcp --add-port=5000/tcp --add-port=9000/tcp --add-port=9001/tcp --permanent
 sudo firewall-cmd --reload
+# --add-port=3000/tcp 
+# --add-port=4000/tcp   
+# --add-port=5601/tcp  
+# --add-port=7000/tcp
+# --add-port=7000/udp
+
 
 ################################
 ########## Services ############
@@ -516,27 +522,27 @@ sudo systemctl daemon-reload
 
 # Configure services for autostart
 sudo systemctl enable nginx.service
-sudo systemctl enable kibana.service
+# sudo systemctl enable kibana.service
 sudo systemctl enable heartbeat.service
 sudo systemctl enable filebeat.service
 sudo systemctl enable metricbeat.service
-sudo systemctl enable mariadb.service
-sudo systemctl enable hackmd.service
-sudo systemctl enable gitea.service
+# sudo systemctl enable mariadb.service
+# sudo systemctl enable hackmd.service
+# sudo systemctl enable gitea.service
 sudo systemctl enable mattermost.service
 sudo systemctl enable elasticsearch.service
 sudo systemctl enable thehive.service
 sudo systemctl enable cortex.service
-sudo systemctl enable murmur.service
+# sudo systemctl enable murmur.service
 
 # Start all the services
 sudo systemctl start elasticsearch.service
-sudo systemctl start kibana.service
+# sudo systemctl start kibana.service
 sudo systemctl start cortex.service
-sudo systemctl start gitea.service
-sudo systemctl start hackmd.service
+# sudo systemctl start gitea.service
+# sudo systemctl start hackmd.service
 sudo systemctl start thehive.service
-sudo systemctl start murmur.service
+# sudo systemctl start murmur.service
 sudo systemctl start nginx.service
 sudo systemctl start heartbeat.service
 sudo systemctl start metricbeat.service
@@ -544,7 +550,7 @@ sudo systemctl start filebeat.service
 sudo systemctl start mattermost.service
 
 # Configure the Murmur SuperUser account
-sudo /opt/murmur/murmur.x86 -ini /etc/murmur.ini -supw $mumblepassphrase
+# sudo /opt/murmur/murmur.x86 -ini /etc/murmur.ini -supw $mumblepassphrase
 
 ################################
 ### Secure MySQL installtion ###
@@ -584,10 +590,10 @@ cat /dev/null > ~/.bash_history && history -c
 ######### Success Page #########
 ################################
 clear
-echo "The Mattermost passphrase for the MariaDB database is: "$mattermostpassphrase
-echo "The Gitea passphrase for the MariaDB database is: "$giteapassphrase
-echo "The HackMD passphrase for the MariaDB database and the service administration account is: "$hackmdpassphrase
-echo "The Mumble SuperUser passphrase is: "$mumblepassphrase
+#echo "The Mattermost passphrase for the MariaDB database is: "$mattermostpassphrase
+#echo "The Gitea passphrase for the MariaDB database is: "$giteapassphrase
+#echo "The HackMD passphrase for the MariaDB database and the service administration account is: "$hackmdpassphrase
+#echo "The Mumble SuperUser passphrase is: "$mumblepassphrase
 echo "The CAPES landing passphrase for the account \"operator\" is: "$capespassphrase
 echo "Please see the "Build, Operate, Maintain" documentation for the post-installation steps."
 echo "The CAPES landing page has been successfully deployed. Browse to http://$HOSTNAME (or http://$IP if you don't have DNS set up) to begin using the services."
