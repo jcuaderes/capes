@@ -29,8 +29,8 @@ echo "Create your Mattermost passphrase for the MySQL database and press [Enter]
 read -s mattermostpassphrase
 
 # Create your Mumble passphrase
-echo "Create your Mumble SuperUser passphrase and press [Enter]."
-read -s mumblepassphrase
+#echo "Create your Mumble SuperUser passphrase and press [Enter]."
+#read -s mumblepassphrase
 
 # Create your CAPES Landing Page passphrase
 echo "Create your CAPES Landing Page passphrase for the account \"operator\" and press [Enter]."
