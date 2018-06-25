@@ -135,7 +135,7 @@ sed -i '/requestscortexutils/d' requirements.txt
 sudo /usr/bin/pip2.7 install -r requirements.txt
 sudo /usr/bin/pip3.6 install -r requirements.txt
 rm requirements.txt
-for d in /opt/cortex/analyzers/* ; do (sudo /usr/bin/sed -i 's/python3.6/python3/' $d/*.py); done
+for d in /opt/cortex/analyzers/* ; do (sudo /usr/bin/sed -i 's/python3/python3.6/' $d/*.py); done
 
 # Update the location of the analyzers
 sudo sed -i 's/path\/to\/Cortex\-Analyzers/\/opt\/cortex/' /etc/cortex/application.conf
